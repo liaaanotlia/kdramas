@@ -4,7 +4,7 @@ import pandas as pd
 # Load dataset
 @st.cache_data
 def load_data():
-    df = pd.read_csv("korean_dramas_preprocessed.csv")
+    df = pd.read_csv("kdrama_cleaned.csv")
     
     # Menghapus spasi di sekitar nama kolom
     df.columns = df.columns.str.strip()  # Hapus spasi yang tidak terlihat
@@ -33,8 +33,7 @@ st.write(f"*Number of Episodes:* {drama_detail['Number of Episodes'] if 'Number 
 st.write(f"*Duration:* {drama_detail['Duration'] if 'Duration' in drama_detail else 'Data not available'}")
 st.write(f"*Content Rating:* {drama_detail['Content Rating'] if 'Content Rating' in drama_detail else 'Data not available'}")
 st.write(f"*Rating:* {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
-st.write(f"*Synopsis:* {drama_detail['Synopsis'] if 'Synopsis' in drama_detail else 'Data not available'}")
-st.write(f"*Genre:* {', '.join(drama_detail['Genre'])}")
+st.write(f"*Genre:* {' '.join(drama_detail['Genre'])}")  # Menampilkan genre dengan spasi, bukan koma
 st.write(f"*Cast:* {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
 
 # Fungsi untuk menghitung jumlah kesamaan genre
@@ -58,19 +57,19 @@ df = df[df['Name'] != selected_drama]
 # Rekomendasi berdasarkan genre yang sama
 st.subheader("Recommended K-Dramas based on Genre:")
 recommended_drama_by_genre = df[df['Genre'].apply(lambda genres: any(genre in drama_detail['Genre'] for genre in genres))].sort_values(by='genre_similarity', ascending=False).head(5)
-st.write(f"Recommendations based on genres: {', '.join(drama_detail['Genre'])}:")
+st.write(f"Recommendations based on genres: {' '.join(drama_detail['Genre'])}:")
 st.dataframe(recommended_drama_by_genre[['Name', 'Rating', 'Number of Episodes', 'Genre']])
 
 # Rekomendasi berdasarkan cast yang sama
 st.subheader("Recommended K-Dramas based on Cast:")
 recommended_drama_by_cast = df[df['Cast'].apply(lambda cast: any(actor in drama_detail['Cast'] for actor in cast.split(', ')))].sort_values(by='cast_similarity', ascending=False).head(5)
-st.write(f"Recommendations based on cast: {', '.join(drama_detail['Cast'].split(', '))}:")
+st.write(f"Recommendations based on cast: {' '.join(drama_detail['Cast'].split(', '))}:")
 st.dataframe(recommended_drama_by_cast[['Name', 'Rating', 'Number of Episodes', 'Cast']])
 
 # Rekomendasi berdasarkan genre dan cast yang sama
 st.subheader("Recommended K-Dramas based on Genre and Cast:")
 recommended_drama_by_genre_and_cast = df.sort_values(by='total_similarity', ascending=False).head(5)
-st.write(f"Recommendations based on genres: {', '.join(drama_detail['Genre'])} and cast: {', '.join(drama_detail['Cast'].split(', '))}:")
+st.write(f"Recommendations based on genres: {' '.join(drama_detail['Genre'])} and cast: {' '.join(drama_detail['Cast'].split(', '))}:")
 st.dataframe(recommended_drama_by_genre_and_cast[['Name', 'Rating', 'Number of Episodes', 'Genre', 'Cast']])
 
 # Footer
