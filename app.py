@@ -33,7 +33,6 @@ st.write(f"*Number of Episodes:* {drama_detail['Number of Episodes'] if 'Number 
 st.write(f"*Duration:* {drama_detail['Duration'] if 'Duration' in drama_detail else 'Data not available'}")
 st.write(f"*Content Rating:* {drama_detail['Content Rating'] if 'Content Rating' in drama_detail else 'Data not available'}")
 st.write(f"*Rating:* {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
-st.write(f"*Synopsis:* {drama_detail['Synopsis'] if 'Synopsis' in drama_detail else 'Data not available'}")
 st.write(f"*Genre:* {' '.join(drama_detail['Genre'])}")
 st.write(f"*Cast:* {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
 
