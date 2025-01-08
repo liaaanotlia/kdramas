@@ -33,7 +33,7 @@ st.write(f"*Number of Episodes:* {drama_detail['Number of Episodes'] if 'Number 
 st.write(f"*Duration:* {drama_detail['Duration'] if 'Duration' in drama_detail else 'Data not available'}")
 st.write(f"*Content Rating:* {drama_detail['Content Rating'] if 'Content Rating' in drama_detail else 'Data not available'}")
 st.write(f"*Rating:* {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
-st.write(f"*Genre:* {' '.join(drama_detail['Genre'])}")  # Menampilkan genre dengan spasi, bukan koma
+st.write(f"*Genre:* {drama_detail['Genre'] if 'Genre' in drama_detail else 'Data not available'}")
 st.write(f"*Cast:* {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
 
 # Fungsi untuk menghitung jumlah kesamaan genre
