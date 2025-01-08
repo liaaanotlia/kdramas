@@ -34,18 +34,8 @@ st.write(f"*Duration:* {drama_detail['Duration'] if 'Duration' in drama_detail e
 st.write(f"*Content Rating:* {drama_detail['Content Rating'] if 'Content Rating' in drama_detail else 'Data not available'}")
 st.write(f"*Rating:* {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
 st.write(f"*Synopsis:* {drama_detail['Synopsis'] if 'Synopsis' in drama_detail else 'Data not available'}")
-
-# Menampilkan genre satu per satu
-st.write("*Genre:*")
-for genre in drama_detail['Genre']:
-    st.write(genre, end=' ')
-
-st.write("\n")
-
-# Menampilkan cast satu per satu
-st.write("*Cast:*")
-for actor in drama_detail['Cast'].split(', '):
-    st.write(actor, end=' ')
+st.write(f"*Genre:* {' '.join(drama_detail['Genre'])}")
+st.write(f"*Cast:* {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
 
 # Fungsi untuk menghitung jumlah kesamaan genre
 def count_genre_similarity(drama):
