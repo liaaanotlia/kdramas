@@ -103,11 +103,12 @@ def display_recommendations(title, recommendations, similarity_col):
         col = cols[index % 3]  # Distribusi ke kolom berdasarkan index
         with col:
             with st.container():  # Kontainer untuk memastikan elemen sejajar
-                st.markdown(f"**🎬 {drama['Name']}**")
+                st.markdown(f"<h4 style='font-size: 20px; font-weight: bold;'>{drama['Name']}</h4>", unsafe_allow_html=True)
                 st.write(f"**⭐ Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
                 st.write(f"**🎞️ Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
                 st.write(f"**📚 Genre:** {', '.join(drama['Genre'])}")
                 st.write(f"**✨ Similarity:** {drama[similarity_col]:.2f}")
+                st.markdown("<hr>")  # Pemisah antar kolom
 
 # Menampilkan rekomendasi
 display_recommendations("✨ Recommended K-Dramas Based on Genre and Cast", recommended_by_genre_and_cast, "total_similarity")
