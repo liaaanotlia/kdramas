@@ -27,27 +27,27 @@ def cosine_similarity_manual(vec_a, vec_b):
     return dot / (norm_a * norm_b)
 
 # Judul Aplikasi
-st.title("K-Drama Recommendation")
-st.markdown("Korean drama recommendation for you")
+st.title("🌟 K-Drama Recommendation 🎥")
+st.markdown("Discover your next favorite Korean drama with our recommendations! 💖")
 
 # Load dataset
 df = load_data()
 
 # Dropdown untuk memilih drama
 selected_drama = st.selectbox(
-    "Select a Korean Drama:",
+    "🎬 Select a Korean Drama:",
     options=df['Name'].values
 )
 
 # Detail drama yang dipilih
 drama_detail = df[df['Name'] == selected_drama].iloc[0]
 
-st.write(f"**Name:** {drama_detail['Name']}")
-st.write(f"**Year of Release:** {drama_detail['Year of release'] if 'Year of release' in drama_detail else 'Data not available'}")
-st.write(f"**Number of Episodes:** {drama_detail['Number of Episodes'] if 'Number of Episodes' in drama_detail else 'Data not available'}")
-st.write(f"**Rating:** {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
-st.write(f"**Genre:** {', '.join(drama_detail['Genre'])}")
-st.write(f"**Cast:** {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
+st.write(f"**🎭 Name:** {drama_detail['Name']}")
+st.write(f"**📅 Year of Release:** {drama_detail['Year of release'] if 'Year of release' in drama_detail else 'Data not available'}")
+st.write(f"**🎞️ Number of Episodes:** {drama_detail['Number of Episodes'] if 'Number of Episodes' in drama_detail else 'Data not available'}")
+st.write(f"**⭐ Rating:** {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
+st.write(f"**📚 Genre:** {', '.join(drama_detail['Genre'])}")
+st.write(f"**👥 Cast:** {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
 
 # Menghitung vektor genre untuk setiap drama
 def compute_genre_vector(drama_genre, all_genres):
@@ -102,13 +102,13 @@ def display_recommendations(title, recommendations, similarity_col):
     for index, (_, drama) in enumerate(recommendations.iterrows()):
         col = cols[index % 3]  # Distribusi ke kolom berdasarkan index
         with col:
-            st.markdown(f"### {drama['Name']}")
-            st.write(f"**Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
-            st.write(f"**Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
-            st.write(f"**Genre:** {', '.join(drama['Genre'])}")
-            st.write(f"**Total Similarity:** {drama[similarity_col]:.2f}")
+            st.markdown(f"### 🎬 {drama['Name']}")
+            st.write(f"**⭐ Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
+            st.write(f"**🎞️ Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
+            st.write(f"**📚 Genre:** {', '.join(drama['Genre'])}")
+            st.write(f"**✨ Total Similarity:** {drama[similarity_col]:.2f}")
 
 # Menampilkan rekomendasi
-display_recommendations("Recommended K-Dramas Based on Genre and Cast", recommended_by_genre_and_cast, "total_similarity")
-display_recommendations("Recommended K-Dramas Based on Genre", recommended_by_genre, "genre_similarity")
-display_recommendations("Recommended K-Dramas Based on Cast", recommended_by_cast, "cast_similarity")
+display_recommendations("✨ Recommended K-Dramas Based on Genre and Cast 🎭", recommended_by_genre_and_cast, "total_similarity")
+display_recommendations("🎥 Recommended K-Dramas Based on Genre 📚", recommended_by_genre, "genre_similarity")
+display_recommendations("👥 Recommended K-Dramas Based on Cast 🎭", recommended_by_cast, "cast_similarity")
