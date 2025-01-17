@@ -70,13 +70,15 @@ df['genre_similarity'] = df.apply(
 )
 # Menghitung vektor cast untuk setiap drama
 def compute_cast_vector(drama_cast, all_casts):
-    return [1 if cast in drama_cast else 0 for cast in all_casts]
+    # Pisahkan cast berdasarkan koma dan spasi, dan pastikan elemen yang unik
+    cast_list = [cast.strip() for cast in drama_cast.split(",")]
+    return [1 if cast in cast_list else 0 for cast in all_casts]
 
 # Semua cast unik
 all_casts = list({cast for casts in df['Cast'] for cast in casts})
 
 # Vektor cast drama yang dipilih
-selected_cast_vector = compute_genre_vector(drama_detail['Cast'], all_casts)
+selected_cast_vector = compute_cast_vector(drama_detail['Cast'], all_casts)
 
 # Menghitung cosine similarity untuk cast
 df['cast_similarity'] = df.apply(
