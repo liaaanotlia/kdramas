@@ -95,11 +95,12 @@ recommended_by_cast = df.sort_values(by='cast_similarity', ascending=False).head
 # Rekomendasi berdasarkan genre + cast
 recommended_by_genre_and_cast = df.sort_values(by='total_similarity', ascending=False).head(5)
 
-# Fungsi untuk menampilkan rekomendasi dalam layout grid
+# Fungsi untuk menampilkan rekomendasi dalam layout grid (3 kolom)
 def display_recommendations(title, recommendations, similarity_col):
     st.subheader(title)
-    cols = st.columns(5)
-    for col, (_, drama) in zip(cols, recommendations.iterrows()):
+    cols = st.columns(3)  # Ubah menjadi 3 kolom
+    for index, (_, drama) in enumerate(recommendations.iterrows()):
+        col = cols[index % 3]  # Distribusi ke kolom berdasarkan index
         with col:
             st.markdown(f"### {drama['Name']}")
             st.write(f"**Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
