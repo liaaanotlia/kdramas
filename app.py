@@ -43,12 +43,12 @@ selected_drama = st.selectbox(
 # Detail drama yang dipilih
 drama_detail = df[df['Name'] == selected_drama].iloc[0]
 
-st.write(f"**🎥 Name:** {drama_detail['Name']}")
-st.write(f"**📅 Year of Release:** {drama_detail['Year of release'] if 'Year of release' in drama_detail else 'Data not available'}")
-st.write(f"**🎞️ Number of Episodes:** {drama_detail['Number of Episodes'] if 'Number of Episodes' in drama_detail else 'Data not available'}")
-st.write(f"**⭐ Rating:** {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
-st.write(f"**📚 Genre:** {', '.join(drama_detail['Genre'])}")
-st.write(f"**👥 Cast:** {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
+st.write(f"🎥 Name:** {drama_detail['Name']}")
+st.write(f"📅 Year of Release:** {drama_detail['Year of release'] if 'Year of release' in drama_detail else 'Data not available'}")
+st.write(f"🎞 Number of Episodes:** {drama_detail['Number of Episodes'] if 'Number of Episodes' in drama_detail else 'Data not available'}")
+st.write(f"⭐ Rating:** {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
+st.write(f"📚 Genre:** {', '.join(drama_detail['Genre'])}")
+st.write(f"👥 Cast:** {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
 
 # Menghitung vektor genre untuk setiap drama
 def compute_genre_vector(drama_genre, all_genres):
@@ -68,22 +68,16 @@ df['genre_similarity'] = df.apply(
     ),
     axis=1
 )
-# Menghitung vektor cast untuk setiap drama
-def compute_cast_vector(drama_cast, all_casts):
-    return [1 if genre in drama_cast else 0 for cast in all_casts]
-
-# Semua cast unik
-all_casts = list({cast for casts in df['Cast'] for cast in casts})
-
-# Vektor genre drama yang dipilih
-selected_genre_vector = compute_genre_vector(drama_detail['Cast'], all_casts)
 
 # Menghitung cosine similarity untuk cast
+def compute_cast_similarity(cast_a, cast_b):
+    cast_list_a = cast_a.split(", ") if isinstance(cast_a, str) else []
+    cast_list_b = cast_b.split(", ") if isinstance(cast_b, str) else []
+    cast_vector = [1 if actor in cast_list_a else 0 for actor in cast_list_b]
+    return cosine_similarity_manual(cast_vector, [1] * len(cast_vector))
+
 df['cast_similarity'] = df.apply(
-    lambda x: cosine_similarity_manual(
-        compute_cast_vector(x['Cast'], all_casts),
-        selected_cast_vector
-    ),
+    lambda x: compute_cast_similarity(drama_detail['Cast'], x['Cast']),
     axis=1
 )
 
@@ -129,11 +123,11 @@ def display_recommendations(title, recommendations, similarity_col):
         with col:
             with st.container():  # Kontainer untuk memastikan elemen sejajar
                 st.markdown(f"<h4 style='font-size: 20px; font-weight: bold;'>{drama['Name']}</h4>", unsafe_allow_html=True)
-                st.write(f"**⭐ Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
-                st.write(f"**🎞️ Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
-                st.write(f"**📚 Genre:** {', '.join(drama['Genre'])}")
-                st.write(f"**👥 Cast:** {drama['Cast'] if 'Cast' in drama else 'N/A'}")  # Menampilkan cast
-                st.write(f"**✨ Similarity:** {drama[similarity_col]:.2f}")
+                st.write(f"⭐ Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
+                st.write(f"🎞 Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
+                st.write(f"📚 Genre:** {', '.join(drama['Genre'])}")
+                st.write(f"👥 Cast:** {drama['Cast'] if 'Cast' in drama else 'N/A'}")  # Menampilkan cast
+                st.write(f"✨ Similarity:** {drama[similarity_col]:.2f}")
                 st.markdown("  ")  # Pemisah antar kolom
 
 # Menampilkan rekomendasi
