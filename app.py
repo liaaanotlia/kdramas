@@ -49,11 +49,21 @@ st.write(f"**Rating:** {drama_detail['Rating'] if 'Rating' in drama_detail else 
 st.write(f"**Genre:** {', '.join(drama_detail['Genre'])}")
 st.write(f"**Cast:** {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
 
-# Hitung similarity (contoh sederhana untuk demo)
+# Menghitung vektor genre untuk setiap drama
+def compute_genre_vector(drama_genre, all_genres):
+    return [1 if genre in drama_genre else 0 for genre in all_genres]
+
+# Semua genre unik
+all_genres = list({genre for genres in df['Genre'] for genre in genres})
+
+# Vektor genre drama yang dipilih
+selected_genre_vector = compute_genre_vector(drama_detail['Genre'], all_genres)
+
+# Menghitung cosine similarity untuk semua drama
 df['similarity'] = df.apply(
     lambda x: cosine_similarity_manual(
-        [1 if genre in drama_detail['Genre'] else 0 for genre in x['Genre']],
-        [1] * len(drama_detail['Genre'])
+        compute_genre_vector(x['Genre'], all_genres),
+        selected_genre_vector
     ),
     axis=1
 )
@@ -64,18 +74,14 @@ df = df[df['Name'] != selected_drama]
 # Pilih 5 rekomendasi berdasarkan similarity tertinggi
 recommended_dramas = df.sort_values(by='similarity', ascending=False).head(5)
 
-# Tampilkan rekomendasi dalam layout card
+# Tampilkan rekomendasi dalam layout grid
 st.subheader("Recommended K-Dramas for You")
-for _, drama in recommended_dramas.iterrows():
-    st.markdown(f"""
-    <div style="background-color:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:15px; box-shadow: 0px 2px 4px rgba(0,0,0,0.1);">
-        <h4 style="margin:0;">{drama['Name']}</h4>
-        <p style="margin:0;"><strong>Rating:</strong> {drama['Rating'] if 'Rating' in drama else 'N/A'}</p>
-        <p style="margin:0;"><strong>Number of Episodes:</strong> {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}</p>
-        <p style="margin:0;"><strong>Genre:</strong> {', '.join(drama['Genre'])}</p>
-        <p style="margin:0;"><strong>Cast:</strong> {drama['Cast'] if 'Cast' in drama else 'N/A'}</p>
-    </div>
-    """, unsafe_allow_html=True)
+cols = st.columns(5)  # Membuat 5 kolom untuk grid
 
-# Footer
-st.markdown("*Created with Streamlit* © 2025")
+for col, (_, drama) in zip(cols, recommended_dramas.iterrows()):
+    with col:
+        st.markdown(f"### {drama['Name']}")
+        st.write(f"**Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
+        st.write(f"**Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
+        st.write(f"**Genre:** {', '.join(drama['Genre'])}")
+        st.write(f"**Cast:** {drama['Cast'] if 'Cast' in drama else 'N/A'}")
