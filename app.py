@@ -108,7 +108,7 @@ def display_recommendations(title, recommendations, similarity_col):
                 st.write(f"**🎞️ Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
                 st.write(f"**📚 Genre:** {', '.join(drama['Genre'])}")
                 st.write(f"**✨ Similarity:** {drama[similarity_col]:.2f}")
-                st.markdown("<hr>")  # Pemisah antar kolom
+                st.markdown("  ")  # Pemisah antar kolom
 
 # Menampilkan rekomendasi
 display_recommendations("✨ Recommended K-Dramas Based on Genre and Cast", recommended_by_genre_and_cast, "total_similarity")
