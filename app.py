@@ -42,7 +42,7 @@ selected_drama = st.selectbox(
 # Detail drama yang dipilih
 drama_detail = df[df['Name'] == selected_drama].iloc[0]
 
-st.write(f"**🎭 Name:** {drama_detail['Name']}")
+st.write(f"**🎥 Name:** {drama_detail['Name']}")
 st.write(f"**📅 Year of Release:** {drama_detail['Year of release'] if 'Year of release' in drama_detail else 'Data not available'}")
 st.write(f"**🎞️ Number of Episodes:** {drama_detail['Number of Episodes'] if 'Number of Episodes' in drama_detail else 'Data not available'}")
 st.write(f"**⭐ Rating:** {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
