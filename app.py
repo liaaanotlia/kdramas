@@ -43,12 +43,12 @@ selected_drama = st.selectbox(
 # Detail drama yang dipilih
 drama_detail = df[df['Name'] == selected_drama].iloc[0]
 
-st.write(f"🎥 Name:** {drama_detail['Name']}")
-st.write(f"📅 Year of Release:** {drama_detail['Year of release'] if 'Year of release' in drama_detail else 'Data not available'}")
-st.write(f"🎞 Number of Episodes:** {drama_detail['Number of Episodes'] if 'Number of Episodes' in drama_detail else 'Data not available'}")
-st.write(f"⭐ Rating:** {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
-st.write(f"📚 Genre:** {', '.join(drama_detail['Genre'])}")
-st.write(f"👥 Cast:** {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
+st.write(f"**🎥 Name:** {drama_detail['Name']}")
+st.write(f"**📅 Year of Release:** {drama_detail['Year of release'] if 'Year of release' in drama_detail else 'Data not available'}")
+st.write(f"**🎞️ Number of Episodes:** {drama_detail['Number of Episodes'] if 'Number of Episodes' in drama_detail else 'Data not available'}")
+st.write(f"**⭐ Rating:** {drama_detail['Rating'] if 'Rating' in drama_detail else 'Data not available'}")
+st.write(f"**📚 Genre:** {', '.join(drama_detail['Genre'])}")
+st.write(f"**👥 Cast:** {drama_detail['Cast'] if 'Cast' in drama_detail else 'Data not available'}")
 
 # Menghitung vektor genre untuk setiap drama
 def compute_genre_vector(drama_genre, all_genres):
@@ -123,11 +123,11 @@ def display_recommendations(title, recommendations, similarity_col):
         with col:
             with st.container():  # Kontainer untuk memastikan elemen sejajar
                 st.markdown(f"<h4 style='font-size: 20px; font-weight: bold;'>{drama['Name']}</h4>", unsafe_allow_html=True)
-                st.write(f"⭐ Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
-                st.write(f"🎞 Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
-                st.write(f"📚 Genre:** {', '.join(drama['Genre'])}")
-                st.write(f"👥 Cast:** {drama['Cast'] if 'Cast' in drama else 'N/A'}")  # Menampilkan cast
-                st.write(f"✨ Similarity:** {drama[similarity_col]:.2f}")
+                st.write(f"**⭐ Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
+                st.write(f"**🎞️ Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
+                st.write(f"**📚 Genre:** {', '.join(drama['Genre'])}")
+                st.write(f"**👥 Cast:** {drama['Cast'] if 'Cast' in drama else 'N/A'}")  # Menampilkan cast
+                st.write(f"**✨ Similarity:** {drama[similarity_col]:.2f}")
                 st.markdown("  ")  # Pemisah antar kolom
 
 # Menampilkan rekomendasi
