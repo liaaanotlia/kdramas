@@ -95,16 +95,17 @@ recommended_by_cast = df.sort_values(by='cast_similarity', ascending=False).head
 # Rekomendasi berdasarkan genre + cast
 recommended_by_genre_and_cast = df.sort_values(by='total_similarity', ascending=False).head(5)
 
-# Fungsi untuk menampilkan rekomendasi secara vertikal (1 baris per drama)
+# Fungsi untuk menampilkan rekomendasi dalam layout grid
 def display_recommendations(title, recommendations, similarity_col):
     st.subheader(title)
-    for _, drama in recommendations.iterrows():
-        st.markdown(f"### {drama['Name']}")
-        st.write(f"**Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
-        st.write(f"**Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
-        st.write(f"**Genre:** {', '.join(drama['Genre'])}")
-        st.write(f"**Similarity ({similarity_col}):** {drama[similarity_col]:.2f}")
-        st.write("---")  # Garis pemisah antar rekomendasi
+    cols = st.columns(5)
+    for col, (_, drama) in zip(cols, recommendations.iterrows()):
+        with col:
+            st.markdown(f"### {drama['Name']}")
+            st.write(f"**Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
+            st.write(f"**Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
+            st.write(f"**Genre:** {', '.join(drama['Genre'])}")
+            st.write(f"**Total Similarity:** {drama[similarity_col]:.2f}")
 
 # Menampilkan rekomendasi
 display_recommendations("Recommended K-Dramas Based on Genre and Cast", recommended_by_genre_and_cast, "total_similarity")
