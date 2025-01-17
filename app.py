@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
 # Load dataset
 @st.cache_data
@@ -11,11 +12,11 @@ def load_data():
 
 # Fungsi untuk menghitung dot product secara manual
 def dot_product(vec_a, vec_b):
-    return sum(a * b for a, b in zip(vec_a, vec_b))
+    return np.dot(vec_a, vec_b)
 
 # Fungsi untuk menghitung norma (magnitude) secara manual
 def vector_norm(vec):
-    return sum(x**2 for x in vec) ** 0.5
+    return np.linalg.norm(vec)
 
 # Fungsi untuk menghitung cosine similarity secara manual
 def cosine_similarity_manual(vec_a, vec_b):
