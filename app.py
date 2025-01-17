@@ -56,41 +56,29 @@ def compute_genre_vector(drama_genre, all_genres):
 # Semua genre unik
 all_genres = list({genre for genres in df['Genre'] for genre in genres})
 
-# Vektor genre drama yang dipilih
-selected_genre_vector = compute_genre_vector(drama_detail['Genre'], all_genres)
+# Fungsi untuk menghitung vektor genre dan cast gabungan
+def compute_combined_vector(genre, cast, all_genres, all_casts):
+    genre_vector = compute_genre_vector(genre, all_genres)
+    cast_vector = [1 if actor in cast.split(", ") else 0 for actor in all_casts]
+    return genre_vector + cast_vector  # Gabungkan kedua vektor
 
-# Menghitung cosine similarity untuk genre
-df['genre_similarity'] = df.apply(
+# Daftar semua aktor yang unik (untuk cast vector)
+all_casts = list(set([actor for cast in df['Cast'] for actor in cast.split(", ")]))
+
+# Vektor gabungan drama yang dipilih
+selected_combined_vector = compute_combined_vector(drama_detail['Genre'], drama_detail['Cast'], all_genres, all_casts)
+
+# Menghitung cosine similarity untuk total (genre + cast)
+df['total_similarity'] = df.apply(
     lambda x: cosine_similarity_manual(
-        compute_genre_vector(x['Genre'], all_genres),
-        selected_genre_vector
+        compute_combined_vector(x['Genre'], x['Cast'], all_genres, all_casts),
+        selected_combined_vector
     ),
     axis=1
 )
 
-# Menghitung cosine similarity untuk cast
-def compute_cast_similarity(cast_a, cast_b):
-    cast_list_a = cast_a.split(", ") if isinstance(cast_a, str) else []
-    cast_list_b = cast_b.split(", ") if isinstance(cast_b, str) else []
-    cast_vector = [1 if actor in cast_list_a else 0 for actor in cast_list_b]
-    return cosine_similarity_manual(cast_vector, [1] * len(cast_vector))
-
-df['cast_similarity'] = df.apply(
-    lambda x: compute_cast_similarity(drama_detail['Cast'], x['Cast']),
-    axis=1
-)
-
-# Total similarity berdasarkan genre + cast
-df['total_similarity'] = df['genre_similarity'] + df['cast_similarity']
-
 # Hapus drama yang dipilih dari daftar rekomendasi
 df = df[df['Name'] != selected_drama]
-
-# Rekomendasi berdasarkan genre (hanya yang memiliki genre_similarity > 0)
-recommended_by_genre = df[df['genre_similarity'] > 0].sort_values(by='genre_similarity', ascending=False).head(6)
-
-# Rekomendasi berdasarkan cast (hanya yang memiliki cast_similarity > 0)
-recommended_by_cast = df[df['cast_similarity'] > 0].sort_values(by='cast_similarity', ascending=False).head(6)
 
 # Rekomendasi berdasarkan genre + cast (hanya yang memiliki total_similarity > 0)
 recommended_by_genre_and_cast = df[df['total_similarity'] > 0].sort_values(by='total_similarity', ascending=False).head(6)
@@ -107,11 +95,9 @@ def display_recommendations(title, recommendations, similarity_col):
                 st.write(f"**⭐ Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
                 st.write(f"**🎞️ Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
                 st.write(f"**📚 Genre:** {', '.join(drama['Genre'])}")
-                st.write(f"**👥 Cast:** {drama['Cast'] if 'Cast' in drama else 'N/A'}")  # Menampilkan cast
+                st.write(f"**👥 Cast:** {drama['Cast'] if 'Cast' in drama else 'N/A'}") 
                 st.write(f"**✨ Similarity:** {drama[similarity_col]:.2f}")
                 st.markdown("  ")  # Pemisah antar kolom
 
 # Menampilkan rekomendasi
 display_recommendations("✨ Recommended K-Dramas Based on Genre and Cast", recommended_by_genre_and_cast, "total_similarity")
-display_recommendations("📚 Recommended K-Dramas Based on Genre", recommended_by_genre, "genre_similarity")
-display_recommendations("👥 Recommended K-Dramas Based on Cast", recommended_by_cast, "cast_similarity")
