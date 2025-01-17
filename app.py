@@ -103,6 +103,7 @@ def display_recommendations(title, recommendations, similarity_col):
         col = cols[index % 3]  # Distribusi ke kolom berdasarkan index
         with col:
             with st.container():  # Kontainer untuk memastikan elemen sejajar
+                # Judul drama dengan highlight tambahan
                 st.markdown(f"**🎬 {drama['Name']}**")  # Judul drama tetap utuh
                 st.write(f"**⭐ Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
                 st.write(f"**🎞️ Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
