@@ -86,14 +86,14 @@ df['total_similarity'] = df['genre_similarity'] + df['cast_similarity']
 # Hapus drama yang dipilih dari daftar rekomendasi
 df = df[df['Name'] != selected_drama]
 
-# Rekomendasi berdasarkan genre
-recommended_by_genre = df.sort_values(by='genre_similarity', ascending=False).head(6)
+# Rekomendasi berdasarkan genre (hanya yang memiliki genre_similarity > 0)
+recommended_by_genre = df[df['genre_similarity'] > 0].sort_values(by='genre_similarity', ascending=False).head(6)
 
-# Rekomendasi berdasarkan cast
-recommended_by_cast = df.sort_values(by='cast_similarity', ascending=False).head(6)
+# Rekomendasi berdasarkan cast (hanya yang memiliki cast_similarity > 0)
+recommended_by_cast = df[df['cast_similarity'] > 0].sort_values(by='cast_similarity', ascending=False).head(6)
 
-# Rekomendasi berdasarkan genre + cast
-recommended_by_genre_and_cast = df.sort_values(by='total_similarity', ascending=False).head(6)
+# Rekomendasi berdasarkan genre + cast (hanya yang memiliki total_similarity > 0)
+recommended_by_genre_and_cast = df[df['total_similarity'] > 0].sort_values(by='total_similarity', ascending=False).head(6)
 
 # Fungsi untuk menampilkan rekomendasi dalam layout grid (3 kolom) tanpa memotong judul
 def display_recommendations(title, recommendations, similarity_col):
