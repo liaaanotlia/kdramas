@@ -68,16 +68,22 @@ df['genre_similarity'] = df.apply(
     ),
     axis=1
 )
+# Menghitung vektor cast untuk setiap drama
+def compute_cast_vector(drama_cast, all_casts):
+    return [1 if genre in drama_cast else 0 for cast in all_casts]
+
+# Semua cast unik
+all_casts = list({cast for casts in df['Cast'] for cast in casts})
+
+# Vektor cast drama yang dipilih
+selected_cast_vector = compute_genre_vector(drama_detail['Cast'], all_casts)
 
 # Menghitung cosine similarity untuk cast
-def compute_cast_similarity(cast_a, cast_b):
-    cast_list_a = cast_a.split(", ") if isinstance(cast_a, str) else []
-    cast_list_b = cast_b.split(", ") if isinstance(cast_b, str) else []
-    cast_vector = [1 if actor in cast_list_a else 0 for actor in cast_list_b]
-    return cosine_similarity_manual(cast_vector, [1] * len(cast_vector))
-
 df['cast_similarity'] = df.apply(
-    lambda x: compute_cast_similarity(drama_detail['Cast'], x['Cast']),
+    lambda x: cosine_similarity_manual(
+        compute_cast_vector(x['Cast'], all_casts),
+        selected_cast_vector
+    ),
     axis=1
 )
 
