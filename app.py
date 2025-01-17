@@ -27,7 +27,7 @@ def cosine_similarity_manual(vec_a, vec_b):
     return dot / (norm_a * norm_b)
 
 # Judul Aplikasi
-st.title("🌟 K-Drama Recommendation 🎥")
+st.title("🎥 K-Drama Recommendation")
 st.markdown("Discover your next favorite Korean drama with our recommendations! 💖")
 
 # Load dataset
@@ -95,20 +95,21 @@ recommended_by_cast = df.sort_values(by='cast_similarity', ascending=False).head
 # Rekomendasi berdasarkan genre + cast
 recommended_by_genre_and_cast = df.sort_values(by='total_similarity', ascending=False).head(5)
 
-# Fungsi untuk menampilkan rekomendasi dalam layout grid (3 kolom)
+# Fungsi untuk menampilkan rekomendasi dalam layout grid (3 kolom) tanpa memotong judul
 def display_recommendations(title, recommendations, similarity_col):
     st.subheader(title)
-    cols = st.columns(3)  # Ubah menjadi 3 kolom
+    cols = st.columns(3)  # Layout 3 kolom
     for index, (_, drama) in enumerate(recommendations.iterrows()):
         col = cols[index % 3]  # Distribusi ke kolom berdasarkan index
         with col:
-            st.markdown(f"### 🎬 {drama['Name']}")
-            st.write(f"**⭐ Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
-            st.write(f"**🎞️ Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
-            st.write(f"**📚 Genre:** {', '.join(drama['Genre'])}")
-            st.write(f"**✨ Total Similarity:** {drama[similarity_col]:.2f}")
+            with st.container():  # Kontainer untuk memastikan elemen sejajar
+                st.markdown(f"**🎬 {drama['Name']}**")  # Judul drama tetap utuh
+                st.write(f"**⭐ Rating:** {drama['Rating'] if 'Rating' in drama else 'N/A'}")
+                st.write(f"**🎞️ Episodes:** {drama['Number of Episodes'] if 'Number of Episodes' in drama else 'N/A'}")
+                st.write(f"**📚 Genre:** {', '.join(drama['Genre'])}")
+                st.write(f"**✨ Similarity:** {drama[similarity_col]:.2f}")
 
 # Menampilkan rekomendasi
-display_recommendations("✨ Recommended K-Dramas Based on Genre and Cast 🎭", recommended_by_genre_and_cast, "total_similarity")
-display_recommendations("🎥 Recommended K-Dramas Based on Genre 📚", recommended_by_genre, "genre_similarity")
-display_recommendations("👥 Recommended K-Dramas Based on Cast 🎭", recommended_by_cast, "cast_similarity")
+display_recommendations("✨ Recommended K-Dramas Based on Genre and Cast", recommended_by_genre_and_cast, "total_similarity")
+display_recommendations("📚 Recommended K-Dramas Based on Genre", recommended_by_genre, "genre_similarity")
+display_recommendations("👥 Recommended K-Dramas Based on Cast", recommended_by_cast, "cast_similarity")
