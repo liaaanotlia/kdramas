@@ -75,7 +75,7 @@ def compute_cast_vector(drama_cast, all_casts):
     return [1 if cast in cast_list else 0 for cast in all_casts]
 
 # Semua cast unik
-all_casts = list({cast for casts in df['Cast'] for cast in casts})
+all_casts = list({cast for casts in df['Cast'] for cast in casts.split(",")})
 
 # Vektor cast drama yang dipilih
 selected_cast_vector = compute_cast_vector(drama_detail['Cast'], all_casts)
@@ -89,17 +89,16 @@ df['cast_similarity'] = df.apply(
     axis=1
 )
 
-# Menghitung cosine similarity untuk genre & cast
+# Menghitung vektor gabungan (genre + cast)
 def compute_combined_vector(genre, cast, all_genres, all_casts):
     genre_vector = compute_genre_vector(genre, all_genres)
-    cast_vector = [1 if actor in cast.split(", ") else 0 for actor in all_casts]
+    cast_vector = compute_cast_vector(cast, all_casts)
     return genre_vector + cast_vector
 
-# Daftar semua aktor yang unik (untuk cast vector)
-all_casts = list(set([actor for cast in df['Cast'] for actor in cast.split(", ")]))
-
 # Vektor gabungan drama yang dipilih
-selected_combined_vector = compute_combined_vector(drama_detail['Genre'], drama_detail['Cast'], all_genres, all_casts)
+selected_combined_vector = compute_combined_vector(
+    drama_detail['Genre'], drama_detail['Cast'], all_genres, all_casts
+)
 
 # Menghitung cosine similarity untuk total (genre + cast)
 df['total_similarity'] = df.apply(
