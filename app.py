@@ -76,9 +76,16 @@ def compute_cast_vector(drama_cast, all_casts):
 
 # Semua cast unik
 all_casts = list({cast for casts in df['Cast'] for cast in casts.split(",")})
+st.write("Daftar pemeran unik:", all_casts)
 
 # Vektor cast drama yang dipilih
 selected_cast_vector = compute_cast_vector(drama_detail['Cast'], all_casts)
+st.write(f"Vektor pemeran untuk drama yang dipilih: {selected_cast_vector}")
+
+for index, row in df.iterrows():
+    other_cast_vector = compute_cast_vector(row['Cast'], all_casts)
+    similarity = cosine_similarity_manual(selected_cast_vector, other_cast_vector)
+    st.write(f"Similarity dengan {row['Name']}: {similarity:.2f}")
 
 # Menghitung cosine similarity untuk cast
 df['cast_similarity'] = df.apply(
